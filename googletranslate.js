@@ -52,6 +52,7 @@ function GetIdAndLang() {
         }
     });
 }
+var fileName = 'Languages.js';
 
 function AppendToArray() {
     var languages = {};
@@ -59,8 +60,19 @@ function AppendToArray() {
         languages[results.arrayLang[i].toLowerCase()] = results.arrayIndex[i];
     }
     finalData = "exports.languages = [" + JSON.stringify(languages) + "];";
-    console.log("Languages File ahs been created");
-    fs.appendFileSync('Languages.js', '' + finalData + '\n');
+    fs.stat(fileName, function(err, status) {
+        if (!err) {
+            fs.unlink(fileName, function(err) {
+                if (err)
+                    console.log(err);
+                console.log("File Was present")
+                fs.appendFileSync(fileName, '' + finalData + '\n');
+            });
+        } else {
+            console.log("New file")
+            fs.appendFileSync(fileName, '' + finalData + '\n');
+        }
+    });
     QuitDriver();
 }
 
